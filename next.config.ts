@@ -6,6 +6,15 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },
+  redirects: async () => {
+    return [
+      {
+        source: "/discord",
+        destination: "https://discord.gg/57E8HMCnGw",
+        permanent: true,
+      },
+    ]
+  }
 };
 
 export default nextConfig;
