@@ -11,7 +11,7 @@ func mainRoute(rg *gin.RouterGroup) {
 	ping.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"error":   false,
-			"message": "quizlas api is up and running",
+			"message": "Mountaineer Craft api is up and running",
 		})
 	})
 }
