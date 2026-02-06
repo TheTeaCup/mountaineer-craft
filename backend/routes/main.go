@@ -34,3 +34,4 @@ func getRoutes() {
 	main := router.Group("/")
 	mainRoute(main)
 }
+
