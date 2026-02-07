@@ -4,8 +4,10 @@ import { Box, Heading } from "@chakra-ui/react";
 import Loading from "@/components/loading";
 
 type User = {
-  name: string;
+  id: string;
+  username: string;
   email: string;
+  avatar?: string | null;
 };
 
 export default function MePage() {
@@ -15,22 +17,31 @@ export default function MePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const token = sessionStorage.getItem("auth_token");
+    if (!token) {
+      setError("Not authenticated");
+      setLoading(false);
+      router.push("/login");
+      return;
+    }
+
     fetch("https://api.mountaineercraft.net/me", {
-      credentials: "include", // if using cookies/session
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
     })
       .then(async (res) => {
         if (!res.ok) throw new Error("Not authenticated");
         return res.json();
       })
-      .then((data: User) => {
+      .then((data: { id: string; username: string; email: string; avatar?: string }) => {
         setUser(data);
         setLoading(false);
       })
       .catch((err) => {
         setError(err.message);
         setLoading(false);
-        // Redirect to login if unauthenticated
-      //  router.push("/login");
+        router.push("/login");
       });
   }, [router]);
 
@@ -39,10 +50,12 @@ export default function MePage() {
   if (error) return <Box>Error: {error}</Box>;
 
   return (
-    <Box>
-      <Heading>Your Profile</Heading>
-      <p><strong>Name:</strong> {user?.name}</p>
+    <Box p={4}>
+      <Heading mb={4}>Your Profile</Heading>
+      <p><strong>ID:</strong> {user?.id}</p>
+      <p><strong>Username:</strong> {user?.username}</p>
       <p><strong>Email:</strong> {user?.email}</p>
+      {user?.avatar && <img src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`} alt="Avatar" />}
     </Box>
   );
 }

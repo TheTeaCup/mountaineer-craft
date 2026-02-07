@@ -26,6 +26,7 @@ export default function OAuthDiscord() {
       return;
     }
 
+    // Call API
     fetch("https://api.mountaineercraft.net/auth/discord", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -33,13 +34,20 @@ export default function OAuthDiscord() {
     })
       .then(async (res) => {
         if (!res.ok) {
-          setMessage("Authentication failed");
+          const data = await res.json().catch(() => ({}));
+          const msg = data?.error || "Authentication failed";
+          setMessage(msg);
           setError(true);
-
+          throw new Error(msg);
         }
         return res.json();
       })
-      .then(() => {
+      .then((data) => {
+        // Store JWT token in sessionStorage or localStorage
+        if (data.token) {
+          sessionStorage.setItem("auth_token", data.token);
+        }
+
         setMessage("Login successful! Redirecting...");
         setTimeout(() => router.push("/me"), 1500);
       })
