@@ -7,8 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func meRoute(rg *gin.RouterGroup) {
-	me := rg.Group("/")
+func meRoute(me *gin.RouterGroup) {
 
 	me.GET("/", func(c *gin.Context) {
 		// Read JWT from cookie
