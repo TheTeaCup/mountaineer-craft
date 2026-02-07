@@ -3,6 +3,8 @@ package routes
 import (
 	"log"
 	"os"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -14,8 +16,14 @@ func Run() {
 	gin.SetMode(gin.ReleaseMode)
 	router.SetTrustedProxies([]string{"127.0.0.1", "172.18.0.1"})
 
-	router.Use(cors.Default())
-	router.SetTrustedProxies(nil)
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"https://mountaineercraft.net", "http://localhost:3000"}, // your Next.js app URL
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true, // important to send cookies
+		MaxAge:           12 * time.Hour,
+	}))
 
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{
