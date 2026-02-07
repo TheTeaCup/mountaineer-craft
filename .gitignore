@@ -86,3 +86,6 @@ debug
 *.pprof
 *.pdf
 pprof.*
+go/
+.config
+.git/
