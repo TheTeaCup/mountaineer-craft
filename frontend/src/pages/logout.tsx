@@ -17,6 +17,7 @@ export default function Logout() {
     router.replace("/login");
   }, [router]);
 
+  
   return (
     <>
       <Head>
