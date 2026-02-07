@@ -3,7 +3,18 @@ import Head from "next/head";
 
 export default function Login() {
   if (typeof window !== "undefined") {
-    window.location.href = "https://discord.com/oauth2/authorize?client_id=1465494022150684769&response_type=code&redirect_uri=https%3A%2F%2Fmountaineercraft.net%2Foauth%2Fdiscord&scope=identify+guilds+email";
+    const state = crypto.randomUUID();
+
+    sessionStorage.setItem("discord_oauth_state", state);
+
+    const params = new URLSearchParams({
+      client_id: "1465494022150684769",
+      response_type: "code",
+      redirect_uri: "https://mountaineercraft.net/oauth/discord",
+      scope: "identify guilds email",
+      state,
+    });
+    window.location.href = `https://discord.com/oauth2/authorize?${params.toString()}`;
   }
 
   return (
@@ -25,7 +36,7 @@ export default function Login() {
           <Heading fontSize={{ base: "xl", md: "3xl" }} mb={4}>
             Redirecting you to Discord for authentication...
           </Heading>
-        <Spinner color="colorPalette.600" colorPalette="yellow" size="lg"/>
+          <Spinner color="colorPalette.600" colorPalette="yellow" size="lg" />
         </Box>
       </Flex>
     </>

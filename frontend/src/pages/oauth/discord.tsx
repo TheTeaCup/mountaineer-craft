@@ -1,7 +1,54 @@
 import { Flex, Box, Heading, Spinner } from "@chakra-ui/react";
 import Head from "next/head";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function OAuthDiscord() {
+  const router = useRouter();
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    const { code, state } = router.query;
+
+    if (!code || typeof code !== "string") {
+      setMessage("Missing Discord authorization code.");
+      setError(true);
+      return;
+    }
+
+    const storedState = sessionStorage.getItem("discord_oauth_state");
+    if (storedState && state !== storedState) {
+      setMessage("Invalid OAuth state.");
+      setError(true);
+      return;
+    }
+
+    fetch("https://api.mountaineercraft.net/auth/discord", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          setMessage("Authentication failed");
+          setError(true);
+
+        }
+        return res.json();
+      })
+      .then(() => {
+        setMessage("Login successful! Redirecting...");
+        setTimeout(() => router.push("/me"), 1500);
+      })
+      .catch(() => {
+        setMessage("Discord authentication failed.");
+        setError(true);
+      });
+  }, [router.isReady, router.query, router]);
+
   return (
     <>
       <Head>
@@ -19,7 +66,13 @@ export default function OAuthDiscord() {
       >
         <Box>
           <Heading fontSize={{ base: "xl", md: "3xl" }} mb={4}>
-            Welcome back!
+            {message || "Processing your Discord authentication..."}
+            {!message && <Spinner color="colorPalette.600" colorPalette="yellow" size="lg" ml={4} />}
+            {error && (
+              <Box mt={4} color="red.500">
+                Click <a href="/login" style={{ textDecoration: "underline" }}>here</a> to try again.
+              </Box>
+            )}
           </Heading>
         </Box>
       </Flex>

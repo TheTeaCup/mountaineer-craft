@@ -49,5 +49,8 @@ func getRoutes() {
 
 	auth := router.Group("/auth")
 	auth.POST("/discord", authRoute)
+
+	me := router.Group("/me")
+	meRoute(me)
 }
 
