@@ -21,9 +21,8 @@ export default function OAuthDiscord() {
 
     const storedState = sessionStorage.getItem("discord_oauth_state");
     if (storedState && state !== storedState) {
-      setMessage("Invalid OAuth state.");
-      setError(true);
-      return;
+      sessionStorage.removeItem("auth_token");
+      sessionStorage.removeItem("user");
     }
 
     // Call API
@@ -74,12 +73,31 @@ export default function OAuthDiscord() {
       >
         <Box>
           <Heading fontSize={{ base: "xl", md: "3xl" }} mb={4}>
+            {!message && (
+              <>
+                <br />
+                <Spinner
+                  color="colorPalette.600"
+                  colorPalette="yellow"
+                  size="xl"
+                  ml={4}
+                />
+                <br />
+                <br />
+              </>
+            )}
             {message || "Processing your Discord authentication..."}
-            {!message && <Spinner color="colorPalette.600" colorPalette="yellow" size="lg" ml={4} />}
             {error && (
-              <Box mt={4} color="red.500">
-                Click <a href="/login" style={{ textDecoration: "underline" }}>here</a> to try again.
-              </Box>
+              <>
+                <br />
+                <Box mt={5} color="red.500">
+                  Click{" "}
+                  <a href="/login" style={{ textDecoration: "underline" }}>
+                    here
+                  </a>{" "}
+                  to try again.
+                </Box>
+              </>
             )}
           </Heading>
         </Box>

@@ -33,10 +33,11 @@ export default function Login() {
         textAlign="center"
       >
         <Box>
+          <Spinner color="colorPalette.600" colorPalette="yellow" size="xl" />
+          <br />
           <Heading fontSize={{ base: "xl", md: "3xl" }} mb={4}>
             Redirecting you to Discord for authentication...
           </Heading>
-          <Spinner color="colorPalette.600" colorPalette="yellow" size="lg" />
         </Box>
       </Flex>
     </>
