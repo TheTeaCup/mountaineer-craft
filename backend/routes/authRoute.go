@@ -39,17 +39,14 @@ func authRoute(c *gin.Context) {
 		strings.NewReader(data.Encode()),
 	)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "failed to create token request"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create token request"})
 		return
 	}
-
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil || resp.StatusCode != 200 {
-		// log the error and response body for debugging
-
-		c.JSON(500, gin.H{"error": "token exchange failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "token exchange failed"})
 		return
 	}
 	defer resp.Body.Close()
@@ -60,7 +57,7 @@ func authRoute(c *gin.Context) {
 	}
 
 	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
-		c.JSON(500, gin.H{"error": "invalid token response"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid token response"})
 		return
 	}
 
@@ -71,15 +68,14 @@ func authRoute(c *gin.Context) {
 		nil,
 	)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "failed to create user request"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user request"})
 		return
 	}
-
 	userReq.Header.Set("Authorization", "Bearer "+tokenResp.AccessToken)
 
 	userResp, err := http.DefaultClient.Do(userReq)
 	if err != nil || userResp.StatusCode != 200 {
-		c.JSON(500, gin.H{"error": "failed to fetch discord user"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch discord user"})
 		return
 	}
 	defer userResp.Body.Close()
@@ -92,42 +88,30 @@ func authRoute(c *gin.Context) {
 	}
 
 	if err := json.NewDecoder(userResp.Body).Decode(&discordUser); err != nil {
-		c.JSON(500, gin.H{"error": "invalid user response"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user response"})
 		return
 	}
 
-	// TODO:
-	// - Create / lookup user in DB
-	// - Never return Discord access token
+	// TODO: lookup or create user in DB if needed
 
-	// Create JWT
+	// Create JWT (expires in 1 day)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":       discordUser.ID,
 		"username": discordUser.Username,
 		"email":    discordUser.Email,
-		"exp":      time.Now().Add(24 * time.Hour).Unix(), // expires in 1 day
+		"exp":      time.Now().Add(24 * time.Hour).Unix(),
 	})
 
 	tokenString, err := token.SignedString(jwtSecret)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "failed to sign JWT"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to sign JWT"})
 		return
 	}
 
-	// Set JWT as a cookie for the frontend
-	c.SetCookie(
-		"auth_token", // name
-		tokenString,  // value
-		86400,        // max age in seconds
-		"/",          // path
-		"",           // domain (empty = current)
-		true,         // secure
-		true,         // httpOnly
-	)
-
-	// Return user info for immediate frontend use
-	c.JSON(200, gin.H{
+	// Return JWT + user info in JSON
+	c.JSON(http.StatusOK, gin.H{
 		"message": "OK",
+		"token":   tokenString,
 		"user": gin.H{
 			"id":       discordUser.ID,
 			"username": discordUser.Username,
