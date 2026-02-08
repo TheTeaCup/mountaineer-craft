@@ -1,10 +1,22 @@
 import { Box, Flex, Heading, Spinner } from "@chakra-ui/react";
 import Head from "next/head";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function Login() {
-  if (typeof window !== "undefined") {
-    const state = crypto.randomUUID();
+  const router = useRouter();
 
+  useEffect(() => {
+    // 1. Check if already logged in
+    const token = sessionStorage.getItem("auth_token");
+
+    if (token) {
+      router.replace("/me");
+      return;
+    }
+
+    // 2. Begin Discord OAuth
+    const state = crypto.randomUUID();
     sessionStorage.setItem("discord_oauth_state", state);
 
     const params = new URLSearchParams({
@@ -14,8 +26,9 @@ export default function Login() {
       scope: "identify guilds email",
       state,
     });
+
     window.location.href = `https://discord.com/oauth2/authorize?${params.toString()}`;
-  }
+  }, [router]);
 
   return (
     <>
