@@ -41,6 +41,8 @@ export default function MePage() {
       .catch((err) => {
         setError(err.message);
         setLoading(false);
+        sessionStorage.removeItem("auth_token");
+        sessionStorage.removeItem("user");
         router.push("/login");
       });
   }, [router]);
