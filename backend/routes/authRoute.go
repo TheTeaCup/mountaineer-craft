@@ -92,6 +92,45 @@ func authRoute(c *gin.Context) {
 		return
 	}
 
+	// Fetch Discord guilds
+guildReq, err := http.NewRequest(
+	"GET",
+	"https://discord.com/api/users/@me/guilds",
+	nil,
+)
+if err != nil {
+	c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create guild request"})
+	return
+}
+guildReq.Header.Set("Authorization", "Bearer "+tokenResp.AccessToken)
+
+guildResp, err := http.DefaultClient.Do(guildReq)
+if err != nil || guildResp.StatusCode != 200 {
+	c.JSON(http.StatusForbidden, gin.H{"error": "failed to fetch guilds"})
+	return
+}
+defer guildResp.Body.Close()
+
+var guilds []struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+if err := json.NewDecoder(guildResp.Body).Decode(&guilds); err != nil {
+	c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid guild response"})
+	return
+}
+
+requiredGuild := os.Getenv("DISCORD_REQUIRED_GUILD_ID")
+inGuild := false
+
+for _, g := range guilds {
+	if g.ID == requiredGuild {
+		inGuild = true
+		break
+	}
+}
+
 	// TODO: lookup or create user in DB if needed
 
 	// Create JWT (expires in 1 day)
@@ -99,6 +138,7 @@ func authRoute(c *gin.Context) {
 		"id":       discordUser.ID,
 		"username": discordUser.Username,
 		"email":    discordUser.Email,
+		"in_guild": inGuild,
 		"exp":      time.Now().Add(24 * time.Hour).Unix(),
 	})
 
