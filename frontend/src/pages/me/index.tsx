@@ -27,17 +27,24 @@ export default function MePage() {
 
     fetch("https://api.mountaineercraft.net/me", {
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then(async (res) => {
         if (!res.ok) throw new Error("Not authenticated");
         return res.json();
       })
-      .then((data: { id: string; username: string; email: string; avatar?: string }) => {
-        setUser(data);
-        setLoading(false);
-      })
+      .then(
+        (data: {
+          id: string;
+          username: string;
+          email: string;
+          avatar?: string;
+        }) => {
+          setUser(data);
+          setLoading(false);
+        }
+      )
       .catch((err) => {
         setError(err.message);
         setLoading(false);
@@ -51,13 +58,29 @@ export default function MePage() {
 
   if (error) return <Box>Error: {error}</Box>;
 
+  /**
+   * to add: if user is not in discord then alert them to 
+   * join the discord in order to use the website.
+   */
+
   return (
-    <Box p={4}>
+    <Box bg="gray.900" color="white" p={4}>
       <Heading mb={4}>Your Profile</Heading>
-      <p><strong>ID:</strong> {user?.id}</p>
-      <p><strong>Username:</strong> {user?.username}</p>
-      <p><strong>Email:</strong> {user?.email}</p>
-      {user?.avatar && <img src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`} alt="Avatar" />}
+      <p>
+        <strong>ID:</strong> {user?.id}
+      </p>
+      <p>
+        <strong>Username:</strong> {user?.username}
+      </p>
+      <p>
+        <strong>Email:</strong> {user?.email}
+      </p>
+      {user?.avatar && (
+        <img
+          src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+          alt="Avatar"
+        />
+      )}
     </Box>
   );
 }
