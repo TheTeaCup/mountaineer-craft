@@ -27,22 +27,43 @@ function run(cmd, cwd = REPO_DIR) {
 }
 
 /**
- * Stop + start Go server using go run .
+ * Stop Go server and wait for port to be released
  */
-async function restartGoServer() {
-  if (goProcess) {
-    console.log("[watcher] Stopping Go server...");
-    goProcess.kill("SIGTERM");
-  }
+function stopGoServer() {
+  return new Promise(resolve => {
+    if (!goProcess) return resolve();
 
-  console.log("[watcher] Downloading Go modules...");
+    console.log("[watcher-dev] Stopping Go server...");
+    goProcess.once("exit", () => {
+      console.log("[watcher-dev] Go server stopped.");
+      goProcess = null;
+      resolve();
+    });
+
+    goProcess.kill("SIGTERM");
+  });
+}
+
+/**
+ * Start Go server using go run .
+ */
+async function startGoServer() {
+  console.log("[watcher-dev] Downloading Go modules...");
   await run("go mod download", BACKEND_DIR);
 
-  console.log("[watcher] Starting Go server (go run .)...");
+  console.log("[watcher-dev] Starting Go server (go run .)...");
   goProcess = spawn("go", ["run", "."], {
     cwd: BACKEND_DIR,
     stdio: "inherit"
   });
+}
+
+/**
+ * Restart Go server cleanly
+ */
+async function restartGoServer() {
+  await stopGoServer();
+  await startGoServer();
 }
 
 /**
@@ -76,29 +97,29 @@ async function checkForUpdates() {
     );
 
     if (watcherChanged) {
-      console.log("[watcher] Watcher updated. Restarting container...");
+      console.log("[watcher-dev] Watcher-Dev updated. Restarting container...");
 
       if (goProcess) goProcess.kill("SIGTERM");
       process.exit(0); // Pterodactyl will restart us
     }
 
     if (backendChanged) {
-      console.log("[watcher] Backend changes detected.");
+      console.log("[watcher-dev] Backend changes detected.");
       await restartGoServer();
     } else {
-      console.log("[watcher] Changes detected, but not backend-related.");
+      console.log("[watcher-dev] Changes detected, but not backend-related.");
     }
   } catch {
-    console.error("[watcher] Update check failed.");
+    console.error("[watcher-dev] Update check failed.");
   }
 }
 
 /**
  * Graceful shutdown (Pterodactyl stop / Ctrl+C)
  */
-function shutdown() {
-  console.log("[watcher] Shutting down...");
-  if (goProcess) goProcess.kill("SIGTERM");
+async function shutdown() {
+  console.log("[watcher-dev] Shutting down...");
+  await stopGoServer();
   process.exit(0);
 }
 
@@ -110,6 +131,6 @@ process.on("SIGINT", shutdown);
  */
 (async () => {
   console.log("[watcher] Initial startup...");
-  await restartGoServer();
+  await startGoServer();
   setInterval(checkForUpdates, 60 * 1000);
 })();
