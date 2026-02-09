@@ -13,8 +13,7 @@ export default function Logout() {
     // Optionally remove other user info
     sessionStorage.removeItem("user");
 
-    // Redirect to login or home
-    router.replace("/login");
+    router.replace("/");
   }, [router]);
 
   
