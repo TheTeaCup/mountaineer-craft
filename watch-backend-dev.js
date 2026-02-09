@@ -1,6 +1,10 @@
 import { exec } from "child_process";
 import { spawn } from "child_process";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const WATCHER_FILE = path.basename(__filename);
 
 const REPO_DIR = process.cwd();
 const BACKEND_DIR = path.join(REPO_DIR, "backend");
@@ -42,16 +46,14 @@ async function restartGoServer() {
 }
 
 /**
- * Pull repo and check for backend changes
+ * Pull repo and react to changes
  */
 async function checkForUpdates() {
   try {
     //console.log(`[watcher] Checking for updates (${new Date().toISOString()})`);
 
     const oldCommit = await run("git rev-parse HEAD");
-
     await run("git pull origin main");
-
     const newCommit = await run("git rev-parse HEAD");
 
     if (oldCommit === newCommit) {
@@ -63,9 +65,22 @@ async function checkForUpdates() {
       `git diff --name-only ${oldCommit} ${newCommit}`
     );
 
-    const backendChanged = diff
-      .split("\n")
-      .some(file => file.startsWith("backend/"));
+    const files = diff.split("\n").filter(Boolean);
+
+    const watcherChanged = files.some(
+      file => path.basename(file) === WATCHER_FILE
+    );
+
+    const backendChanged = files.some(
+      file => file.startsWith("backend/")
+    );
+
+    if (watcherChanged) {
+      console.log("[watcher] Watcher updated. Restarting container...");
+
+      if (goProcess) goProcess.kill("SIGTERM");
+      process.exit(0); // Pterodactyl will restart us
+    }
 
     if (backendChanged) {
       console.log("[watcher] Backend changes detected.");
@@ -73,7 +88,7 @@ async function checkForUpdates() {
     } else {
       console.log("[watcher] Changes detected, but not backend-related.");
     }
-  } catch (err) {
+  } catch {
     console.error("[watcher] Update check failed.");
   }
 }
@@ -81,17 +96,14 @@ async function checkForUpdates() {
 /**
  * Graceful shutdown (Pterodactyl stop / Ctrl+C)
  */
-process.on("SIGTERM", () => {
+function shutdown() {
   console.log("[watcher] Shutting down...");
   if (goProcess) goProcess.kill("SIGTERM");
   process.exit(0);
-});
+}
 
-process.on("SIGINT", () => {
-  console.log("[watcher] Interrupted.");
-  if (goProcess) goProcess.kill("SIGTERM");
-  process.exit(0);
-});
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
 
 /**
  * Initial start + poll every minute
