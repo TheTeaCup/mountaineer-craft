@@ -46,7 +46,7 @@ async function restartGoServer() {
  */
 async function checkForUpdates() {
   try {
-    console.log(`[watcher] Checking for updates (${new Date().toISOString()})`);
+    //console.log(`[watcher] Checking for updates (${new Date().toISOString()})`);
 
     const oldCommit = await run("git rev-parse HEAD");
 
@@ -55,7 +55,7 @@ async function checkForUpdates() {
     const newCommit = await run("git rev-parse HEAD");
 
     if (oldCommit === newCommit) {
-      console.log("[watcher] No changes.");
+      //console.log("[watcher] No changes.");
       return;
     }
 
