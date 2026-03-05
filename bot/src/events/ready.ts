@@ -16,7 +16,7 @@ export default {
 
     const statuses = [
       { name: "your Minecraft server", type: ActivityType.Watching },
-      { name: "App State Mountaineers", type: ActivityType.Watching },
+      { name: "Watching the App State Mountaineers!", type: ActivityType.Watching },
     ];
 
     let index = 0;
