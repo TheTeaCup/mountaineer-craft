@@ -7,6 +7,7 @@ import {
   VStack,
   HStack,
   Badge,
+  Stack,
 } from "@chakra-ui/react";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
@@ -18,7 +19,6 @@ export default function Home() {
   const JAVA_ADDRESS = "play.mountaineercraft.net";
   const BEDROCK_ADDRESS = "bedrock.mountaineercraft.net";
   const BEDROCK_PORT = "19132";
-  const DISCORD_URL = "/discord";
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -132,11 +132,25 @@ export default function Home() {
           </VStack>
 
           <VStack gap={4}>
-            <Button colorScheme="purple" size="lg">
-              <a href={DISCORD_URL} target="_blank">
+            <Button size="lg">
+              <a href={"/discord"} target="_blank">
                 Join our Discord
               </a>
             </Button>
+
+            <Stack direction="row">
+              <Button size="lg">
+                <a href={"/map"} target="_blank">
+                  View Our Online Map
+                </a>
+              </Button>
+
+              <Button size="lg">
+                <a href={"/analytics"} target="_blank">
+                  Analytics Dashboard
+                </a>
+              </Button>
+            </Stack>
 
             <Text color="gray.400">
               {onlinePlayers === null

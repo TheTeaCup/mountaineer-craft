@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
         destination: "https://discord.gg/57E8HMCnGw",
         permanent: true,
       },
+      {
+        source: "/map",
+        destination: "https://map.mountaineercraft.net",
+        permanent: true,
+      },
+      {
+        source: "/analytics",
+        destination: "https://analytics.mountaineercraft.net",
+        permanent: true,
+      },
     ]
   }
 };
