@@ -13,5 +13,10 @@ export const rolePanel = {
       roleId: "1478881919625331000",
       customId: "beta_testing_role",
     },
+    {
+      label: "Boone Local",
+      roleId: "1480686298380632135",
+      customId: "boone_local_role",
+    }
   ],
 };

@@ -52,7 +52,7 @@ const start = async () => {
 
   (async () => {
     try {
-      console.log("Registering slash commands...");
+      Logger.info("Registering slash commands...");
       await rest.put(
         Routes.applicationGuildCommands(
           config.DISCORD_CLIENT_ID,
