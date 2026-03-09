@@ -1,5 +1,10 @@
 import chalk from "chalk";
-import { version } from "discord.js";
+import { version, WebhookClient } from "discord.js";
+import { config } from "../config";
+
+const webhook = new WebhookClient({
+  url: config.DISCORD_LOG_WEBHOOK_URL,
+});
 
 const logger = {
   info(text: string): void {
@@ -12,6 +17,16 @@ const logger = {
 
   error(text: string, err?: string): void {
     console.log(chalk.red(`${text} ${err ?? ""}`.trim()));
+  },
+
+  async toDiscord(text: string): Promise<void> {
+    try {
+      await webhook.send({
+        content: text,
+      });
+    } catch (err) {
+      console.log(chalk.red("Failed to send webhook log"));
+    }
   },
 
   start(): void {

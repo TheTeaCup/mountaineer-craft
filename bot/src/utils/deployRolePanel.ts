@@ -1,6 +1,7 @@
 import { TextChannel } from "discord.js";
 import { rolePanel } from "../data/rolePanel.js";
 import { buildRolePanel } from "./buildRolePanel.js";
+import logger from "./logger.js";
 
 export async function deployRolePanel(client: any) {
   const channel = (await client.channels.fetch(
@@ -22,6 +23,6 @@ export async function deployRolePanel(client: any) {
       components: [row],
     });
 
-    console.log("New role panel created:", message.id);
+    logger.info("New role panel created: " + message.id);
   }
 }

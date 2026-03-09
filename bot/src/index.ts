@@ -13,6 +13,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { config } from "./config.js";
 import Logger from "./utils/logger.js";
+import { loadJobs } from "./utils/jobLoader";
 import { ExtendedClient } from "./types/client.js";
 import { rolePanel } from "./data/rolePanel.js";
 
@@ -59,9 +60,17 @@ const start = async () => {
         ),
         { body: commands },
       );
-      console.log("Slash commands registered.");
+      Logger.info("Slash commands registered.");
     } catch (error) {
-      console.error(error);
+      Logger.error(`${error}`);
+    }
+  })();
+
+  (async () => {
+    try {
+      await loadJobs();
+    } catch (error) {
+      Logger.error(`Error loading jobs: ${error}`);
     }
   })();
 

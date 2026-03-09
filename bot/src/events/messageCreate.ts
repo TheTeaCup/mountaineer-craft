@@ -1,6 +1,7 @@
 import { ChannelType, Events, Message } from "discord.js";
 import { ExtendedClient } from "../types/client";
 import { Event } from "../types/event";
+import logger from "../utils/logger";
 
 const event: Event = {
   name: Events.MessageCreate,
@@ -30,7 +31,7 @@ const event: Event = {
         try {
           await warningMessage.delete();
         } catch (error) {
-          console.error("Failed to delete the warning message:", error);
+          logger.error("Failed to delete the warning message: " + error);
         }
       }, 2_500);
 
