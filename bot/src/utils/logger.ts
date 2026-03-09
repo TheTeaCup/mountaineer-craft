@@ -2,22 +2,22 @@ import chalk from "chalk";
 import { version } from "discord.js";
 
 const logger = {
-    info(text: string): void {
-        console.log(chalk.blue(text));
-    },
+  info(text: string): void {
+    console.log(chalk.blue(text));
+  },
 
-    warn(text: string, warn?: string): void {
-        console.log(chalk.yellow(`${text} ${warn ?? ""}`.trim()));
-    },
+  warn(text: string, warn?: string): void {
+    console.log(chalk.yellow(`${text} ${warn ?? ""}`.trim()));
+  },
 
-    error(text: string, err?: string): void {
-        console.log(chalk.red(`${text} ${err ?? ""}`.trim()));
-    },
+  error(text: string, err?: string): void {
+    console.log(chalk.red(`${text} ${err ?? ""}`.trim()));
+  },
 
-    start(): void {
-        console.log(
-            chalk.hex("#228B22")(
-                `
+  start(): void {
+    console.log(
+      chalk.hex("#228B22")(
+        `
         
          __  __                        _        _                           
         |  \\/  |                      | |      (_)                          
@@ -32,10 +32,10 @@ const logger = {
               Node Version: ${process.version}
               Discord.js Version: ${version}
         
-        `
-            ),
-        );
-    },
+        `,
+      ),
+    );
+  },
 };
 
 export default logger;

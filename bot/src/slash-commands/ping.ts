@@ -10,7 +10,7 @@ const command: SlashCommand = {
     const latency = Date.now() - interaction.createdTimestamp;
 
     await interaction.reply(`🏓 Pong! ${latency}ms`);
-  }
+  },
 };
 
 export default command;
