@@ -40,7 +40,7 @@ class PlayerAnalyticsClient {
       },
     });
 
-    if (res.status === 401) {
+    if (res.status === 401 || res.status === 403) {
       // cookie expired → relogin
       await this.login();
 
