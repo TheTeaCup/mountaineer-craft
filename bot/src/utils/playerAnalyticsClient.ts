@@ -25,8 +25,6 @@ class PlayerAnalyticsClient {
     }
 
     this.cookie = cookie.split(";")[0];
-
-    logger.info("Plan API login successful");
   }
 
   async request(endpoint: string) {
