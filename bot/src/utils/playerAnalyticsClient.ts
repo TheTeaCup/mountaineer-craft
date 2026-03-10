@@ -13,7 +13,7 @@ class PlayerAnalyticsClient {
 
     const res = await fetch(
       `${this.baseUrl}/auth/login?user=${this.user}&password=${this.password}`,
-      { method: "GET" }
+      { method: "GET" },
     );
 
     const cookie = res.headers.get("set-cookie");

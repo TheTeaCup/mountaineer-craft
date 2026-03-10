@@ -17,7 +17,7 @@ const logger = {
 
   async error(text: string, err?: string): Promise<void> {
     console.log(chalk.red(`${text} ${err ?? ""}`.trim()));
-  
+
     try {
       await webhook.send({
         content: `❌ ${text} ${err ?? ""}`.trim(),

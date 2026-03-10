@@ -8,8 +8,6 @@ const job: Job = {
   runOnStart: true,
 
   async run() {
-    logger.info("Fetching online players list...");
-
     const res = await playerAnalyticsClient.request("/v1/playersOnline");
 
     const data = await res.json();
