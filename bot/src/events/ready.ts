@@ -14,9 +14,9 @@ export default {
     await deployRolePanel(client);
 
     const statuses = [
-      { name: "Watching your Minecraft server", type: ActivityType.Watching },
+      { name: "Watching you play...", type: ActivityType.Watching },
       {
-        name: "Watching the App State Mountaineers!",
+        name: "Watching the chat for commands...",
         type: ActivityType.Watching,
       },
     ];
