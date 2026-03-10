@@ -1,5 +1,6 @@
 import { Job } from "../types/job";
 import logger from "../utils/logger";
+import playerAnalyticsClient from "../utils/playerAnalyticsClient";
 
 const job: Job = {
   name: "playersOnline",
@@ -8,6 +9,12 @@ const job: Job = {
 
   async run() {
     logger.info("Fetching online players list...");
+
+    const res = await playerAnalyticsClient.request("/v1/playersOnline");
+
+    const data = await res.json();
+
+    console.log("players online:", data.map((p: any) => p.name).join(", "));
 
     // Example: query minecraft server
     // add a role to a user or remove it based on whether they are online or not

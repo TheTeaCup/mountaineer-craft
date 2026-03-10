@@ -16,6 +16,7 @@ import Logger from "./utils/logger.js";
 import { loadJobs } from "./utils/jobLoader";
 import { ExtendedClient } from "./types/client.js";
 import { rolePanel } from "./data/rolePanel.js";
+import playerAnalyticsClient from "./utils/playerAnalyticsClient";
 
 Logger.start();
 
@@ -71,6 +72,14 @@ const start = async () => {
       await loadJobs();
     } catch (error) {
       Logger.error(`Error loading jobs: ${error}`);
+    }
+  })();
+
+  (async () => {
+    try {
+      playerAnalyticsClient.login();
+    } catch (error) {
+      Logger.error(`Error logging into Plan API: ${error}`);
     }
   })();
 
