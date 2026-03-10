@@ -15,8 +15,16 @@ const logger = {
     console.log(chalk.yellow(`${text} ${warn ?? ""}`.trim()));
   },
 
-  error(text: string, err?: string): void {
+  async error(text: string, err?: string): Promise<void> {
     console.log(chalk.red(`${text} ${err ?? ""}`.trim()));
+  
+    try {
+      await webhook.send({
+        content: `❌ ${text} ${err ?? ""}`.trim(),
+      });
+    } catch {
+      console.log(chalk.red("Failed to send webhook log"));
+    }
   },
 
   async toDiscord(text: string): Promise<void> {
