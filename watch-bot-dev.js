@@ -22,6 +22,7 @@ const BOT_DIR = path.join(REPO_DIR, "bot");
 
 let botProcess = null;
 let checking = false;
+let intentionalStop = false;
 
 /**
  * Run a shell command and return stdout
@@ -47,6 +48,7 @@ function stopBot() {
     if (!botProcess) return resolve();
 
     console.log("[watcher] Stopping Discord bot...");
+    intentionalStop = true;
 
     botProcess.once("exit", () => {
       console.log("[watcher] Discord bot stopped.");
@@ -62,7 +64,13 @@ function stopBot() {
  * Start Discord bot
  */
 async function startBot() {
+  if (botProcess) {
+    console.log("[watcher] Bot already running.");
+    return;
+  }
+
   console.log("[watcher] Starting Discord bot...");
+  intentionalStop = false;
 
   botProcess = spawn("npm", ["run", "dev"], {
     cwd: BOT_DIR,
@@ -71,9 +79,9 @@ async function startBot() {
 
   botProcess.on("exit", code => {
     console.log(`[watcher] Bot exited with code ${code}`);
+    botProcess = null;
 
-    // restart automatically if crash
-    if (code !== 0) {
+    if (!intentionalStop && code !== 0) {
       console.log("[watcher] Restarting bot after crash...");
       setTimeout(startBot, 5000);
     }
