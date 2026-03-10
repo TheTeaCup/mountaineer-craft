@@ -6,24 +6,57 @@ const webhook = new WebhookClient({
   url: config.DISCORD_LOG_WEBHOOK_URL,
 });
 
+function time(): string {
+  return new Date().toLocaleTimeString("en-US", {
+    hour12: false,
+  });
+}
+
+function prefix(level: string): string {
+  return `[${time()} ${level}]:`;
+}
+
 const logger = {
   info(text: string): void {
-    console.log(chalk.blue(text));
+    console.log(
+      chalk.gray(`[${time()} `) +
+        chalk.blue("INFO") +
+        chalk.gray(`]: `) +
+        text
+    );
   },
 
   warn(text: string, warn?: string): void {
-    console.log(chalk.yellow(`${text} ${warn ?? ""}`.trim()));
+    const msg = `${text} ${warn ?? ""}`.trim();
+
+    console.log(
+      chalk.gray(`[${time()} `) +
+        chalk.yellow("WARN") +
+        chalk.gray(`]: `) +
+        msg
+    );
   },
 
   async error(text: string, err?: string): Promise<void> {
-    console.log(chalk.red(`${text} ${err ?? ""}`.trim()));
+    const msg = `${text} ${err ?? ""}`.trim();
+
+    console.log(
+      chalk.gray(`[${time()} `) +
+        chalk.red("ERROR") +
+        chalk.gray(`]: `) +
+        msg
+    );
 
     try {
       await webhook.send({
-        content: `❌ ${text} ${err ?? ""}`.trim(),
+        content: `❌ ${prefix("ERROR")} ${msg}`,
       });
     } catch {
-      console.log(chalk.red("Failed to send webhook log"));
+      console.log(
+        chalk.gray(`[${time()} `) +
+          chalk.red("ERROR") +
+          chalk.gray(`]: Failed to send webhook log`)
+      );
     }
   },
 
@@ -32,8 +65,12 @@ const logger = {
       await webhook.send({
         content: text,
       });
-    } catch (err) {
-      console.log(chalk.red("Failed to send webhook log"));
+    } catch {
+      console.log(
+        chalk.gray(`[${time()} `) +
+          chalk.red("ERROR") +
+          chalk.gray(`]: Failed to send webhook log`)
+      );
     }
   },
 
@@ -55,8 +92,8 @@ const logger = {
               Node Version: ${process.version}
               Discord.js Version: ${version}
         
-        `,
-      ),
+        `
+      )
     );
   },
 };
