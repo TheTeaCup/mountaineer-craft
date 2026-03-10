@@ -2,6 +2,8 @@ import { Events, ActivityType } from "discord.js";
 import { ExtendedClient } from "../types/client";
 import { deployRolePanel } from "../utils/deployRolePanel.js";
 import chalk from "chalk";
+import { loadJobs } from "../utils/jobLoader";
+import Logger from "../utils/logger.js";
 
 export default {
   name: Events.ClientReady,
@@ -12,6 +14,14 @@ export default {
     );
 
     await deployRolePanel(client);
+
+    (async () => {
+      try {
+        await loadJobs(client);
+      } catch (error) {
+        Logger.error(`Error loading jobs: ${error}`);
+      }
+    })();
 
     const statuses = [
       { name: "Watching you play...", type: ActivityType.Watching },

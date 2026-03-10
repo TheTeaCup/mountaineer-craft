@@ -1,7 +1,7 @@
 export interface Job {
   name: string;
-  schedule?: string; // cron schedule
-  interval?: number; // optional interval in ms
+  interval?: number;
   runOnStart?: boolean;
-  run: () => Promise<void>;
+  run(client: import("discord.js").Client): Promise<void>; // pass the client
+  schedule?: string;
 }

@@ -19,10 +19,7 @@ function prefix(level: string): string {
 const logger = {
   info(text: string): void {
     console.log(
-      chalk.gray(`[${time()} `) +
-        chalk.blue("INFO") +
-        chalk.gray(`]: `) +
-        text
+      chalk.gray(`[${time()} `) + chalk.blue("INFO") + chalk.gray(`]: `) + text,
     );
   },
 
@@ -33,7 +30,7 @@ const logger = {
       chalk.gray(`[${time()} `) +
         chalk.yellow("WARN") +
         chalk.gray(`]: `) +
-        msg
+        msg,
     );
   },
 
@@ -41,10 +38,7 @@ const logger = {
     const msg = `${text} ${err ?? ""}`.trim();
 
     console.log(
-      chalk.gray(`[${time()} `) +
-        chalk.red("ERROR") +
-        chalk.gray(`]: `) +
-        msg
+      chalk.gray(`[${time()} `) + chalk.red("ERROR") + chalk.gray(`]: `) + msg,
     );
 
     try {
@@ -55,7 +49,7 @@ const logger = {
       console.log(
         chalk.gray(`[${time()} `) +
           chalk.red("ERROR") +
-          chalk.gray(`]: Failed to send webhook log`)
+          chalk.gray(`]: Failed to send webhook log`),
       );
     }
   },
@@ -69,7 +63,7 @@ const logger = {
       console.log(
         chalk.gray(`[${time()} `) +
           chalk.red("ERROR") +
-          chalk.gray(`]: Failed to send webhook log`)
+          chalk.gray(`]: Failed to send webhook log`),
       );
     }
   },
@@ -92,8 +86,8 @@ const logger = {
               Node Version: ${process.version}
               Discord.js Version: ${version}
         
-        `
-      )
+        `,
+      ),
     );
   },
 };

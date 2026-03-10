@@ -1,10 +1,4 @@
-import {
-  REST,
-  Routes,
-  Interaction,
-  GuildMember,
-  MessageFlags,
-} from "discord.js";
+import { REST, Routes, Interaction, MessageFlags } from "discord.js";
 
 import fs from "fs";
 import path from "path";
@@ -13,7 +7,6 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { config } from "./config.js";
 import Logger from "./utils/logger.js";
-import { loadJobs } from "./utils/jobLoader";
 import { ExtendedClient } from "./types/client.js";
 import { rolePanel } from "./data/rolePanel.js";
 import playerAnalyticsClient from "./utils/playerAnalyticsClient";
@@ -64,14 +57,6 @@ const start = async () => {
       Logger.info("Slash commands registered.");
     } catch (error) {
       Logger.error(`${error}`);
-    }
-  })();
-
-  (async () => {
-    try {
-      await loadJobs();
-    } catch (error) {
-      Logger.error(`Error loading jobs: ${error}`);
     }
   })();
 
