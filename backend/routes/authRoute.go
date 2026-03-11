@@ -157,6 +157,7 @@ for _, g := range guilds {
 			"username": discordUser.Username,
 			"avatar":   discordUser.Avatar,
 			"email":    discordUser.Email,
+			"in_guild": inGuild,
 		},
 	})
 }
