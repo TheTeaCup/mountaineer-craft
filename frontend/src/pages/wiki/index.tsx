@@ -1,12 +1,13 @@
 import { Box, Flex, Spinner } from "@chakra-ui/react";
 import Head from "next/head";
+import Link from "next/link";
 
-export default function Commands() {
-  
+export default function FAQ() {
+
   return (
     <>
       <Head>
-        <title>Commands - Mountaineer Craft</title>
+        <title>Wiki - Mountaineer Craft</title>
       </Head>
 
       <Flex
@@ -18,7 +19,7 @@ export default function Commands() {
         px={6}
         textAlign="center"
       >
-        
+       wip
       </Flex>
     </>
   );
