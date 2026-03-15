@@ -128,6 +128,18 @@ export default function Home() {
                   Copy
                 </Button>
               </HStack>
+              <Text fontSize="sm" color="gray.400" mt={2}>
+                Console player? You can still join using{" "}
+                <a
+                  href="https://bedrocktogether.net/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: "underline" }}
+                >
+                  BedrockTogether
+                </a>
+                .
+              </Text>
             </Box>
           </VStack>
 
