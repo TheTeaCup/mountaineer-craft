@@ -16,6 +16,11 @@ class PlayerAnalyticsClient {
       { method: "GET" },
     );
 
+    if (res.status === 502) {
+      logger.error("Plan API is down (502 Bad Gateway)");
+      throw new Error("Plan API is down");
+    }
+
     const cookie = res.headers.get("set-cookie");
 
     if (!cookie) {
@@ -37,6 +42,13 @@ class PlayerAnalyticsClient {
         cookie: this.cookie!,
       },
     });
+
+    console.log(res)
+
+    if (res.status === 502) {
+      logger.error("Plan API is down (502 Bad Gateway)");
+      throw new Error("Plan API is down");
+    }
 
     if (res.status === 401 || res.status === 403) {
       // cookie expired → relogin
