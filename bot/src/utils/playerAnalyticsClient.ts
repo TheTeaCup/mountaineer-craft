@@ -43,8 +43,6 @@ class PlayerAnalyticsClient {
       },
     });
 
-    console.log(res)
-
     if (res.status === 502) {
       logger.error("Plan API is down (502 Bad Gateway)");
       throw new Error("Plan API is down");
