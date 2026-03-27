@@ -20,6 +20,10 @@ const job: Job = {
       return;
     }
 
+    if (players.length === 0) {
+      return;
+    }
+
     const onlineNames = players.map((p: any) => p.name);
     logger.info("players online: " + onlineNames);
 
