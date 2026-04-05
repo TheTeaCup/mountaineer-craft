@@ -1,6 +1,7 @@
 import { Events, ActivityType } from "discord.js";
 import { ExtendedClient } from "../types/client";
 import { deployRolePanel } from "../utils/deployRolePanel.js";
+import { loadData, updateRulesMessage } from "../utils/rulesEmbed.js";
 import chalk from "chalk";
 import { loadJobs } from "../utils/jobLoader";
 import Logger from "../utils/logger.js";
@@ -14,6 +15,20 @@ export default {
     );
 
     await deployRolePanel(client);
+
+    const data = loadData();
+    try {
+      const channel = await client.channels.fetch(data.channelId);
+
+      if (!channel || !channel.isTextBased()) {
+        console.error("Invalid channel.");
+        return;
+      }
+
+      await updateRulesMessage(channel);
+    } catch (err) {
+      console.error("Failed to update rules:", err);
+    }
 
     (async () => {
       try {
