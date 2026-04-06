@@ -8,7 +8,7 @@ const command: SlashCommand = {
 
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply(
-      "🌍 Our Minecraft Server's Online Map: <https://map.mountaineercraft.net>"
+      "🌍 Our Minecraft Server's Online Map: <https://map.mountaineercraft.net>",
     );
   },
 };

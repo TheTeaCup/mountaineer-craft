@@ -8,9 +8,9 @@ const command: SlashCommand = {
 
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply(
-        `To connect to our Minecraft Server, use the following address: \`play.mountaineercraft.net\`
+      `To connect to our Minecraft Server, use the following address: \`play.mountaineercraft.net\`
         For bedrock edition, use: \`bedrock.mountaineercraft.net:19132\`
-        `
+        `,
     );
   },
 };
