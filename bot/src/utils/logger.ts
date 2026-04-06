@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { version, WebhookClient } from "discord.js";
-import { config } from "../config";
+import { config } from "../config.js";
 
 const webhook = new WebhookClient({
   url: config.DISCORD_LOG_WEBHOOK_URL,

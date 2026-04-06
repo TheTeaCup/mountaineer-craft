@@ -9,7 +9,7 @@ import { config } from "./config.js";
 import Logger from "./utils/logger.js";
 import { ExtendedClient } from "./types/client.js";
 import { rolePanel } from "./data/rolePanel.js";
-import playerAnalyticsClient from "./utils/playerAnalyticsClient";
+import playerAnalyticsClient from "./utils/playerAnalyticsClient.js";
 
 Logger.start();
 

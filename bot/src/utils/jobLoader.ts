@@ -1,11 +1,13 @@
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
 import cron from "node-cron";
-import { Job } from "../types/job";
-import { pathToFileURL } from "url";
-import logger from "./logger";
+import { Job } from "../types/job.js";
+import { fileURLToPath, pathToFileURL } from "url";
+import logger from "./logger.js";
 
 export async function loadJobs(client: import("discord.js").Client) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const jobsPath = path.join(__dirname, "../jobs");
   const files = fs.readdirSync(jobsPath);
 

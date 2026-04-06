@@ -1,9 +1,4 @@
-import {
-  Events,
-  EmbedBuilder,
-  GuildMember,
-  TextChannel,
-} from "discord.js";
+import { Events, EmbedBuilder, GuildMember, TextChannel } from "discord.js";
 
 export default {
   name: Events.GuildMemberAdd,

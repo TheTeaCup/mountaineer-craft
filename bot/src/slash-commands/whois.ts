@@ -5,8 +5,8 @@ import {
   GuildMember,
 } from "discord.js";
 import { SlashCommand } from "../types/command";
-import playerAnalyticsClient from "../utils/playerAnalyticsClient";
-import logger from "../utils/logger";
+import playerAnalyticsClient from "../utils/playerAnalyticsClient.js";
+import logger from "../utils/logger.js";
 
 const command: SlashCommand = {
   data: new SlashCommandBuilder()

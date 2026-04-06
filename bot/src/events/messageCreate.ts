@@ -1,7 +1,7 @@
 import { ChannelType, Events, Message } from "discord.js";
 import { ExtendedClient } from "../types/client";
 import { Event } from "../types/event";
-import logger from "../utils/logger";
+import logger from "../utils/logger.js";
 
 const event: Event = {
   name: Events.MessageCreate,

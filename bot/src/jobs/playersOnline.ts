@@ -1,6 +1,6 @@
 import { Job } from "../types/job";
-import logger from "../utils/logger";
-import playerAnalyticsClient from "../utils/playerAnalyticsClient";
+import logger from "../utils/logger.js";
+import playerAnalyticsClient from "../utils/playerAnalyticsClient.js";
 
 const job: Job = {
   name: "playersOnline",

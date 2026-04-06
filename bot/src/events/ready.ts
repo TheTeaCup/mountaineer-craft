@@ -3,7 +3,7 @@ import { ExtendedClient } from "../types/client";
 import { deployRolePanel } from "../utils/deployRolePanel.js";
 import { loadData, updateRulesMessage } from "../utils/rulesEmbed.js";
 import chalk from "chalk";
-import { loadJobs } from "../utils/jobLoader";
+import { loadJobs } from "../utils/jobLoader.js";
 import Logger from "../utils/logger.js";
 
 export default {
