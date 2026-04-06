@@ -145,20 +145,20 @@ export default function Home() {
 
           <VStack gap={4}>
             <Button size="lg">
-              <a href={"/discord"} target="_blank">
+              <a href={"https://links.mountaineercraft.net/discord"} target="_blank">
                 Join our Discord
               </a>
             </Button>
 
             <Stack direction="row">
               <Button size="lg">
-                <a href={"/map"} target="_blank">
+                <a href={"https://links.mountaineercraft.net/map"} target="_blank">
                   View Our Online Map
                 </a>
               </Button>
 
               <Button size="lg">
-                <a href={"/analytics"} target="_blank">
+                <a href={"https://links.mountaineercraft.net/analytics"} target="_blank">
                   Analytics Dashboard
                 </a>
               </Button>
