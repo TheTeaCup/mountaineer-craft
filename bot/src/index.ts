@@ -86,6 +86,12 @@ const start = async () => {
 
       let action: "added" | "removed" = "added"; // track action
 
+      if (!member.roles.cache.has("1480686298380632135"))
+        return await interaction.reply({
+          content: `You must connect your account via minecraft before interacting with this server.`,
+          flags: MessageFlags.Ephemeral,
+        });
+
       if (member.roles.cache.has(roleConfig.roleId)) {
         await member.roles.remove(roleConfig.roleId);
         action = "removed";
